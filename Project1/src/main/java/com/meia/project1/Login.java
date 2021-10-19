@@ -1,6 +1,14 @@
 package com.meia.project1;
 
 import java.io.*;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 //import javax.swing.Icon;
 //import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -150,50 +158,140 @@ public class Login extends javax.swing.JFrame {
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         //File mainFile = new File("C:\\MEIA\\usuario.txt");
         //File binnFile = new File("C:\\MEIA\\bitacora_usuario.txt");
-        File descMainFile = new File("C:\\MEIA\\desc_usuario.txt");
-        File descBinnFile = new File("C:\\MEIA\\desc_bitacora_usuario.txt");
         
-        try {
-            FileReader descMainReader;
-            FileReader descBinnReader;
+        if (!userField.getText().equals("") && !passField.getText().equals("")) {
+            File mainFile = new File("C:\\MEIA\\usuario.txt");
+            File binnFile = new File("C:\\MEIA\\bitacora_usuario.txt");
             
-            
-            //If file exists. If not, show error.
-            if (descMainFile.exists() && descBinnFile.exists()) {
-                //There is some users.
-                
-                
-                
+            //If there is more than one user. If not, go to register.
+            if (binnFile.length() > 0 ) {
+                FileReader mainReader;
+                FileReader binnReader;
+
+                try {
+                    mainReader = new FileReader(mainFile);
+                    binnReader = new FileReader(binnFile);
+                    BufferedReader bMainReader = new BufferedReader(mainReader);
+                    BufferedReader bBinnReader = new BufferedReader(binnReader);
+                    String mainLine = "";
+                    String binnLine = "";
+                    
+                    try {
+                        mainLine = bMainReader.readLine();
+                        binnLine = bBinnReader.readLine();
+                        String[] mainSplit;
+                        String[] binnSplit;
+                        
+                        while (mainLine != null) {
+                            if (!"".equals(mainLine)) {
+                                mainSplit = mainLine.split("\\|");
+                                
+                                if (mainSplit[0].equals(userField.getText()) && mainSplit[3].equals(cipherPass(passField.getText(), "encriptacionpuraduraparaarchivos"))) {
+                                    //If role is administrator or user.
+                                    if (mainSplit[4].equals("1")) {
+                                        AdminDashboard dashboard = new AdminDashboard();
+                                        dashboard.setVisible(true);
+                                    } else {
+                                        UserDashboard dashboard = new UserDashboard();
+                                        dashboard.setVisible(true);
+                                    }
+                                    
+                                    mainReader.close();
+                                    bMainReader.close();
+                                    this.setVisible(false);
+                                    break;
+                                }
+                            }
+
+                            mainLine = bMainReader.readLine();
+                        }
+                        
+                        while (binnLine != null) {
+                            if (!"".equals(binnLine)) {
+                                binnSplit = binnLine.split("\\|");
+                                
+                                if (binnSplit[0].equals(userField.getText()) && binnSplit[3].equals(cipherPass(passField.getText(), "encriptacionpuraduraparaarchivos"))) {
+                                    //If role is administrator or user.
+                                    if (binnSplit[4].equals("1")) {
+                                        AdminDashboard dashboard = new AdminDashboard();
+                                        dashboard.setVisible(true);
+                                    } else {
+                                        UserDashboard dashboard = new UserDashboard();
+                                        dashboard.setVisible(true);
+                                    }
+                                    
+                                    binnReader.close();
+                                    bBinnReader.close();
+                                    this.setVisible(false);
+                                    break;
+                                }
+                            }
+
+                            binnLine = bBinnReader.readLine();
+                        }
+                        
+                        alertsLbl.setText("Credenciales inválidas.");
+                    } catch (IOException e) {
+                        alertsLbl.setText(String.valueOf(e));
+                    }
+                } catch (FileNotFoundException e) {
+                    alertsLbl.setText("Error al ubicar los archivos.");
+                }
             } else {
-                //Significa que es el primer usuario.
-                Register registerForm = new Register();
-                registerForm.setVisible(true);
+                Register register = new Register();
+                register.setVisible(true);
                 this.setVisible(false);
             }
-        } catch (IOException e) {
-            alertsLbl.setText("Error: " + String.valueOf(e));
-        }        
+        } else {
+            alertsLbl.setText("Debe llenar todos los campos.");
+        }       
     }//GEN-LAST:event_loginBtnActionPerformed
 
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
-        File mainFile = new File("C:\\MEIA\\usuarios.txt");
-        File descFile = new File("C:\\MEIA\\desc_usuarios.txt");
-        Register registerForm = new Register();
-        registerForm.setVisible(true);
-        this.setVisible(false);
+        File mainFile = new File("C:\\MEIA\\usuario.txt");
+        File descMainFile = new File("C:\\MEIA\\desc_usuario.txt");
+        File binnFile = new File("C:\\MEIA\\bitacora_usuario.txt");
+        File descBinnFile = new File("C:\\MEIA\\desc_bitacora_usuario.txt");
         
         try {
-            //Valida si el archivo existe. Si no, lo crea.
-            if (!mainFile.createNewFile() && !descFile.createNewFile()) {
-                //Significa que ya hay usuarios previos.
-            } else {
-                //Significa que es el primer usuario que ingresa.
-            }
+            //If file doesn't exists, creates it.
+            boolean mainFileE = mainFile.createNewFile();
+            boolean descMainFileE = descMainFile.createNewFile();
+            boolean binnFileE = mainFile.createNewFile();
+            boolean descBinnFileE = descMainFile.createNewFile();
+            Register registerForm = new Register();
+            registerForm.setVisible(true);
+            this.setVisible(false);
         } catch (IOException e) {
             alertsLbl.setText("Error: " + String.valueOf(e));
         }
     }//GEN-LAST:event_registerBtnActionPerformed
-
+    
+    //Used to cipher password with AES.
+    public String cipherPass(String pass, String ENCRYPT_KEY) {
+        try {
+            Key aesKey = new SecretKeySpec(ENCRYPT_KEY.getBytes(), "AES");
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, aesKey);
+            byte[] pwd = cipher.doFinal(pass.getBytes());
+            String cPwd = new String(pwd);
+            String rPwd = "";
+            
+            for (int i = 0; i < cPwd.length(); i++) {
+                if (Character.isDigit(cPwd.charAt(i))) {
+                    rPwd += cPwd.charAt(i);
+                }
+            }
+            
+            return rPwd + "aam";
+                    
+        } catch(InvalidKeyException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
+            alertsLbl.setText(String.valueOf(e));
+        }
+        
+        return null;
+    } 
+    
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

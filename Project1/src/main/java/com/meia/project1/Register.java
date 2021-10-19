@@ -385,8 +385,15 @@ public class Register extends javax.swing.JFrame {
             cipher.init(Cipher.ENCRYPT_MODE, aesKey);
             byte[] pwd = cipher.doFinal(pass.getBytes());
             String cPwd = new String(pwd);
-            return cPwd;
-                    
+            String rPwd = "";
+            
+            for (int i = 0; i < cPwd.length(); i++) {
+                if (Character.isDigit(cPwd.charAt(i))) {
+                    rPwd += cPwd.charAt(i);
+                }
+            }
+            
+            return rPwd + "aam";     
         } catch(InvalidKeyException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
             alertsLbl.setText(String.valueOf(e));
         }
