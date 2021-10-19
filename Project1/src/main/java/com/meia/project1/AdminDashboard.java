@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.meia.project1;
 
 /**
@@ -9,12 +5,12 @@ package com.meia.project1;
  * @author asgas
  */
 public class AdminDashboard extends javax.swing.JFrame {
-
-    /**
-     * Creates new form AdminDashboard
-     */
-    public AdminDashboard() {
+    String[] currentUser;
+    
+    public AdminDashboard(String[] user) {
         initComponents();
+        userLbl.setText(user[0]);
+        currentUser = user;
     }
 
     /**
@@ -26,27 +22,84 @@ public class AdminDashboard extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        headerLbl = new javax.swing.JLabel();
+        userLbl = new javax.swing.JLabel();
+        imgLbl = new javax.swing.JLabel();
+        updateBtn = new javax.swing.JButton();
+        registerBtn = new javax.swing.JButton();
+        searchBtn = new javax.swing.JButton();
+        banUser = new javax.swing.JButton();
+        backupBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Panel de administrador");
+        headerLbl.setText("Panel de administrador");
+
+        userLbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        userLbl.setText("user");
+        userLbl.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        imgLbl.setText("img");
+
+        updateBtn.setText("Cambiar datos");
+
+        registerBtn.setText("Registar usuario");
+
+        searchBtn.setText("Buscar usuarios");
+
+        banUser.setText("Dar de baja a un usuario");
+
+        backupBtn.setText("Respaldo");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(138, 138, 138)
-                .addComponent(jLabel1)
-                .addContainerGap(152, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(updateBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(registerBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(searchBtn))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(138, 138, 138)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(headerLbl)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(9, 9, 9)
+                                .addComponent(userLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addComponent(banUser)
+                        .addGap(18, 18, 18)
+                        .addComponent(backupBtn))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(181, 181, 181)
+                        .addComponent(imgLbl)))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(275, Short.MAX_VALUE))
+                .addComponent(headerLbl)
+                .addGap(18, 18, 18)
+                .addComponent(userLbl)
+                .addGap(41, 41, 41)
+                .addComponent(imgLbl)
+                .addGap(72, 72, 72)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(registerBtn)
+                    .addComponent(updateBtn)
+                    .addComponent(searchBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(banUser)
+                    .addComponent(backupBtn))
+                .addGap(44, 44, 44))
         );
 
         pack();
@@ -80,14 +133,19 @@ public class AdminDashboard extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AdminDashboard().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new AdminDashboard(null).setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton backupBtn;
+    private javax.swing.JButton banUser;
+    private javax.swing.JLabel headerLbl;
+    private javax.swing.JLabel imgLbl;
+    private javax.swing.JButton registerBtn;
+    private javax.swing.JButton searchBtn;
+    private javax.swing.JButton updateBtn;
+    private javax.swing.JLabel userLbl;
     // End of variables declaration//GEN-END:variables
 }

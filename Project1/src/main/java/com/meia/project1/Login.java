@@ -181,19 +181,29 @@ public class Login extends javax.swing.JFrame {
                         binnLine = bBinnReader.readLine();
                         String[] mainSplit;
                         String[] binnSplit;
+                        boolean userExists = false;
                         
                         while (mainLine != null) {
                             if (!"".equals(mainLine)) {
                                 mainSplit = mainLine.split("\\|");
                                 
+                                if (mainSplit[0].equals(userField.getText())) {
+                                    userExists = true;
+                                }
+                                
                                 if (mainSplit[0].equals(userField.getText()) && mainSplit[3].equals(cipherPass(passField.getText(), "encriptacionpuraduraparaarchivos"))) {
-                                    //If role is administrator or user.
-                                    if (mainSplit[4].equals("1")) {
-                                        AdminDashboard dashboard = new AdminDashboard();
-                                        dashboard.setVisible(true);
+                                    //Case user is active.
+                                    if (mainSplit[9].equals("1")) {
+                                        //If role is administrator or user.
+                                        if (mainSplit[4].equals("1")) {
+                                            AdminDashboard dashboard = new AdminDashboard(mainSplit);
+                                            dashboard.setVisible(true);
+                                        } else {
+                                            UserDashboard dashboard = new UserDashboard(mainSplit);
+                                            dashboard.setVisible(true);
+                                        }
                                     } else {
-                                        UserDashboard dashboard = new UserDashboard();
-                                        dashboard.setVisible(true);
+                                        alertsLbl.setText("Usuario desactivado.");
                                     }
                                     
                                     mainReader.close();
@@ -210,14 +220,23 @@ public class Login extends javax.swing.JFrame {
                             if (!"".equals(binnLine)) {
                                 binnSplit = binnLine.split("\\|");
                                 
+                                if (binnSplit[0].equals(userField.getText())) {
+                                    userExists = true;
+                                }
+                                
                                 if (binnSplit[0].equals(userField.getText()) && binnSplit[3].equals(cipherPass(passField.getText(), "encriptacionpuraduraparaarchivos"))) {
-                                    //If role is administrator or user.
-                                    if (binnSplit[4].equals("1")) {
-                                        AdminDashboard dashboard = new AdminDashboard();
-                                        dashboard.setVisible(true);
+                                    //Case user is active.
+                                    if (binnSplit[9].equals("1")) {
+                                        //If role is administrator or user.
+                                        if (binnSplit[4].equals("1")) {
+                                            AdminDashboard dashboard = new AdminDashboard(binnSplit);
+                                            dashboard.setVisible(true);
+                                        } else {
+                                            UserDashboard dashboard = new UserDashboard(binnSplit);
+                                            dashboard.setVisible(true);
+                                        }
                                     } else {
-                                        UserDashboard dashboard = new UserDashboard();
-                                        dashboard.setVisible(true);
+                                        alertsLbl.setText("Usuario desactivado.");
                                     }
                                     
                                     binnReader.close();
@@ -231,6 +250,12 @@ public class Login extends javax.swing.JFrame {
                         }
                         
                         alertsLbl.setText("Credenciales inválidas.");
+                        
+                        if (!userExists) {
+                            Register register = new Register();
+                            register.setVisible(true);
+                            this.setVisible(false);
+                        }
                     } catch (IOException e) {
                         alertsLbl.setText(String.valueOf(e));
                     }
