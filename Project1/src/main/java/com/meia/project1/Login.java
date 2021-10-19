@@ -1,15 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.meia.project1;
 
 import java.io.*;
-import javax.swing.Icon;
-import javax.swing.JFrame;
-import javax.swing.JWindow;
-import javax.swing.ImageIcon;
+//import javax.swing.Icon;
+//import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+
 /**
  *
  * @author asgas
@@ -153,43 +148,22 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_exitBtnActionPerformed
 
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
-        File mainFile = new File("C:\\MEIA\\usuarios.txt");
-        File descFile = new File("C:\\MEIA\\desc_usuarios.txt");
+        //File mainFile = new File("C:\\MEIA\\usuario.txt");
+        //File binnFile = new File("C:\\MEIA\\bitacora_usuario.txt");
+        File descMainFile = new File("C:\\MEIA\\desc_usuario.txt");
+        File descBinnFile = new File("C:\\MEIA\\desc_bitacora_usuario.txt");
         
         try {
-            //Valida si el archivo existe. Si no, lo crea.
-            if (!mainFile.createNewFile() && !descFile.createNewFile()) {
-                //Significa que ya hay usuarios previos.
-                FileReader mainReader;
-                FileReader descReader;
+            FileReader descMainReader;
+            FileReader descBinnReader;
+            
+            
+            //If file exists. If not, show error.
+            if (descMainFile.exists() && descBinnFile.exists()) {
+                //There is some users.
                 
-                try {
-                    mainReader = new FileReader(mainFile);
-                    descReader = new FileReader(descFile);
-                    BufferedReader bMainReader = new BufferedReader(mainReader);
-                    BufferedReader bDescReader = new BufferedReader(descReader);
-                    String line = "";
-                    
-                    try {
-                        line = bMainReader.readLine();
-                        String[] split;
-
-                        while (line != null) {
-                            if (!"".equals(line)) {
-                                split = line.split(",");
-                            }
-                            
-                            line = bMainReader.readLine();
-                        }
-
-                        mainReader.close();
-                        bMainReader.close();
-                    } catch (IOException e) {
-                        alertsLbl.setText("Error: " + String.valueOf(e));
-                    }
-                } catch (FileNotFoundException e) {
-                    alertsLbl.setText("Error: " + String.valueOf(e));
-                }
+                
+                
             } else {
                 //Significa que es el primer usuario.
                 Register registerForm = new Register();
