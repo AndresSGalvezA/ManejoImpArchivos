@@ -1,5 +1,5 @@
 # Manejo e Implementación de Archivos
- Laboratorios y exámenes del curso «Manejo e Implementación de Archivos» de la Universidad Rafael Landívar.
+ Laboratorios y proyecto práctico del curso «Manejo e Implementación de Archivos» de la Universidad Rafael Landívar.
 ## Construido con
 * Apache NetBeans IDE 12.0
 * JDK 16
